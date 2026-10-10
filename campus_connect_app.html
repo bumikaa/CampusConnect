@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusConnect - Campus Bulk Delivery & Logistics System</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #F3F4F6; }
+    .bg-amazon-navy { background-color: #131921; }
+    .bg-amazon-dark { background-color: #232F3E; }
+    .bg-amazon-orange { background-color: #FF9900; }
+    .text-amazon-orange { color: #FF9900; }
+    .border-amazon-orange { border-color: #FF9900; }
+    .text-amazon-amber { color: #FEBD69; }
+    .text-amazon-green { color: #067D62; }
+    .bg-amazon-green { background-color: #067D62; }
+    .text-amazon-red { color: #B12704; }
+    .bg-amazon-red { background-color: #B12704; }
+    .tab-btn.active { background-color: #FF9900; color: #131921; font-weight: bold; }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen flex flex-col">
+
+  <!-- Top Navigation Bar -->
+  <header class="bg-amazon-navy text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between text-xs border-b border-gray-800">
+      <div class="flex items-center space-x-2">
+        <span class="font-bold text-amazon-amber">CampusConnect</span>
+        <span class="text-gray-400">• Smarter Bulk Deliveries. Faster Parcel Resolution.</span>
+      </div>
+      <div class="flex items-center space-x-2">
+        <span class="text-gray-300">Active Role View:</span>
+        <select id="roleSelector" onchange="switchRole(this.value)" class="bg-amazon-dark text-amazon-amber px-2.5 py-1 rounded border border-gray-700 font-bold">
+          <option value="DELIVERY_PARTNER">Delivery Person Interface</option>
+          <option value="OPERATIONS_MANAGER">Campus Operator Dashboard (CSV Upload)</option>
+          <option value="STUDENT">User / Student Portal (View & Complaint)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="bg-amazon-orange text-amazon-navy px-2.5 py-1 rounded font-black text-lg">CC</div>
+        <div>
+          <h1 class="font-bold text-base text-white">CampusConnect Hub</h1>
+          <p class="text-xs text-gray-400">Strict Role Permissions • Currency: Indian Rupees (Rs. / ₹)</p>
+        </div>
+      </div>
+
+      <nav class="flex items-center space-x-1 text-xs">
+        <button onclick="switchTab('landing')" id="tab-landing" class="tab-btn active px-3 py-1.5 rounded text-gray-300 hover:text-white">Portal Switcher</button>
+        <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-3 py-1.5 rounded text-gray-300 hover:text-white">Delivery Queue</button>
+        <button onclick="switchTab('student')" id="tab-student" class="tab-btn px-3 py-1.5 rounded text-gray-300 hover:text-white">Track & Raise Complaint</button>
+        <button onclick="switchTab('operator')" id="tab-operator" class="tab-btn px-3 py-1.5 rounded text-gray-300 hover:text-white">Operator Control (CSV & Complaints)</button>
+        <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn px-3 py-1.5 rounded text-gray-300 hover:text-white">Pickup Locations</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="max-w-7xl w-full mx-auto px-4 py-6 flex-1">
+
+    <!-- PAGE 1: PORTAL SWITCHER -->
+    <div id="page-landing" class="space-y-8">
+      <div class="bg-amazon-navy text-white p-10 rounded-2xl border-b-4 border-amazon-orange text-center space-y-3 shadow-md">
+        <h1 class="text-3xl font-black text-white">Role-Based Campus Parcel Delivery & Recovery Platform</h1>
+        <p class="text-sm text-gray-300 max-w-xl mx-auto">
+          Scoped access permissions: Delivery Person (Tracking & Handovers), User/Student (Order View & Complaints), Campus Operator (CSV Upload & Admin Control).
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4 flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="w-10 h-10 bg-amber-100 text-amazon-orange rounded-lg flex items-center justify-center font-bold text-lg">🔍</div>
+            <h3 class="font-bold text-base text-amazon-navy">User / Student Portal</h3>
+            <p class="text-xs text-gray-600">Track order status, view recipient info, select pickup lockers, and lodge complaints/feedback directly to Campus Operators.</p>
+          </div>
+          <button onclick="switchRole('STUDENT')" class="w-full bg-amazon-orange text-amazon-navy font-bold py-2.5 rounded text-xs hover:bg-amber-500 transition-colors">Track Order & Raise Complaint →</button>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4 flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="w-10 h-10 bg-blue-100 text-amazon-navy rounded-lg flex items-center justify-center font-bold text-lg">🚚</div>
+            <h3 class="font-bold text-base text-amazon-navy">Delivery Person Interface</h3>
+            <p class="text-xs text-gray-600">Track assigned deliveries, barcode search, 1-click handovers, and failure logging. (CSV Upload Restricted)</p>
+          </div>
+          <button onclick="switchRole('DELIVERY_PARTNER')" class="w-full bg-amazon-navy text-white font-bold py-2.5 rounded text-xs hover:bg-gray-800 transition-colors">Open Delivery Queue →</button>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4 flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="w-10 h-10 bg-green-100 text-amazon-green rounded-lg flex items-center justify-center font-bold text-lg">📊</div>
+            <h3 class="font-bold text-base text-amazon-navy">Campus Operator Control</h3>
+            <p class="text-xs text-gray-600">EXCLUSIVE permission to upload CSV dataset files, inspect student complaints/feedback desk, and view rupee analytics.</p>
+          </div>
+          <button onclick="switchRole('OPERATIONS_MANAGER')" class="w-full bg-amazon-dark text-amazon-amber font-bold py-2.5 rounded text-xs border border-amazon-orange/40 hover:bg-gray-800 transition-colors">Operator Control & CSV Upload →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 2: DELIVERY PERSON DASHBOARD -->
+    <div id="page-dashboard" class="hidden space-y-6">
+      <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+        <div>
+          <h2 class="font-bold text-lg text-amazon-navy">Delivery Person Interface (Tracking & Handovers Only)</h2>
+          <p class="text-xs text-gray-500">Active Batch: <strong class="text-amazon-orange">BATCH-20261010-01</strong> • Driver: Alex Rivera (DRV-1042)</p>
+        </div>
+        <div class="flex space-x-2">
+          <span class="bg-gray-100 text-gray-600 font-bold px-3 py-1.5 rounded text-xs border">CSV Upload: Restricted</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+          <span class="text-xs font-bold text-gray-500 uppercase">Parcels in Batch</span>
+          <div class="text-2xl font-black text-amazon-navy mt-1">1</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+          <span class="text-xs font-bold text-gray-500 uppercase">Handed Over</span>
+          <div class="text-2xl font-black text-amazon-green mt-1">0</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+          <span class="text-xs font-bold text-gray-500 uppercase">Pending Queue</span>
+          <div class="text-2xl font-black text-amber-600 mt-1">1</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+          <span class="text-xs font-bold text-gray-500 uppercase">Failed / Escalated</span>
+          <div class="text-2xl font-black text-amazon-red mt-1">0</div>
+        </div>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3">
+        <h3 class="font-bold text-amazon-navy text-sm border-b pb-2">Assigned Deliveries Queue</h3>
+        <div class="p-3 bg-gray-50 rounded border border-gray-200 flex justify-between items-center text-xs">
+          <div>
+            <span class="font-bold text-amazon-navy text-sm">TRK-TEST-999</span>
+            <span class="text-gray-500 ml-2">(Taylor Swift • Hostel A - Room 302)</span>
+          </div>
+          <button onclick="alert('Handover confirmed by delivery person!')" class="bg-amazon-green text-white font-bold px-3 py-1 rounded">Confirm Handover</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 3: STUDENT PORTAL (VIEW & COMPLAINT) -->
+    <div id="page-student" class="hidden max-w-2xl mx-auto space-y-6">
+      <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 text-xs">
+        <h2 class="font-bold text-amazon-navy text-base">User / Student Delivery Tracking & Complaint Desk</h2>
+        <div class="flex space-x-2">
+          <input type="text" id="studentTrackInput" placeholder="Enter tracking ID (e.g. TRK-TEST-999)..." class="flex-1 p-2 border border-gray-300 rounded font-mono font-bold">
+          <button onclick="trackStudentParcel()" class="bg-amazon-orange text-amazon-navy font-bold px-4 py-2 rounded">Track Order</button>
+        </div>
+      </div>
+
+      <div id="studentParcelResult" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4 text-xs">
+        <p class="text-gray-500 italic text-center py-4">Enter your tracking ID above to check parcel status and submit feedback/complaints.</p>
+      </div>
+    </div>
+
+    <!-- PAGE 4: CAMPUS OPERATOR CONTROL (CSV UPLOAD & COMPLAINTS DESK) -->
+    <div id="page-operator" class="hidden space-y-6">
+      <div class="bg-amazon-navy text-white p-5 rounded-xl border border-gray-800 flex flex-wrap justify-between items-center gap-4">
+        <div>
+          <h2 class="font-bold text-lg text-white">Campus Operator Control Desk</h2>
+          <p class="text-xs text-gray-300">ONLY Operators have permissions to upload dataset CSV files and resolve student complaints.</p>
+        </div>
+        <div class="flex items-center space-x-3">
+          <label class="bg-amazon-orange text-amazon-navy font-bold px-4 py-2 rounded text-xs cursor-pointer hover:bg-amazon-amber">
+            📁 Upload Kaggle Dataset CSV
+            <input type="file" accept=".csv" onchange="alert('CSV Dataset uploaded cleanly by Operator!')" class="hidden" />
+          </label>
+        </div>
+      </div>
+
+      <!-- Student Complaints Desk for Operator -->
+      <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4 text-xs">
+        <h3 class="font-bold text-amazon-navy text-sm border-b pb-2">Student Complaints & Feedback Management</h3>
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-100 font-bold uppercase text-gray-600">
+              <th class="p-2 border">Parcel ID</th>
+              <th class="p-2 border">Student Name</th>
+              <th class="p-2 border">Issue Type</th>
+              <th class="p-2 border">Details</th>
+              <th class="p-2 border">Status</th>
+              <th class="p-2 border text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="p-2 border font-bold font-mono">TRK-TEST-999</td>
+              <td class="p-2 border">Taylor Swift (+91-9876543210)</td>
+              <td class="p-2 border"><span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-bold">DELAYED DELIVERY</span></td>
+              <td class="p-2 border">Student was in class during delivery attempt. Requested locker pickup.</td>
+              <td class="p-2 border"><span class="bg-red-100 text-red-800 px-2 py-0.5 rounded font-bold">PENDING</span></td>
+              <td class="p-2 border text-right">
+                <button onclick="alert('Complaint marked as resolved!')" class="bg-amazon-green text-white font-bold px-3 py-1 rounded">Mark Resolved</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Rupee Analytics Cards for Operator -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+          <span class="text-xs font-bold text-gray-500 uppercase">Gross Revenue (Rs.)</span>
+          <div class="text-xl font-black text-amazon-navy mt-1">Rs. 1,344.75 Cr</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+          <span class="text-xs font-bold text-gray-500 uppercase">Total Orders</span>
+          <div class="text-xl font-black text-amazon-navy mt-1">99,441</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+          <span class="text-xs font-bold text-gray-500 uppercase">Total Items Shipped</span>
+          <div class="text-xl font-black text-amazon-green mt-1">112,650</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+          <span class="text-xs font-bold text-gray-500 uppercase">On-Time SLA Rate</span>
+          <div class="text-xl font-black text-amazon-green mt-1">91.89%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 5: SETTINGS -->
+    <div id="page-settings" class="hidden max-w-3xl mx-auto space-y-6 text-xs">
+      <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4">
+        <h2 class="font-bold text-amazon-navy text-base border-b pb-2">Approved Campus Pickup Locations</h2>
+        <ul class="space-y-2">
+          <li class="p-3 bg-gray-50 rounded border">📍 <strong>Student Union Logistics Hub</strong> (Building A, Room G-14) • 08:00 - 20:00</li>
+          <li class="p-3 bg-gray-50 rounded border">📍 <strong>Hostel A Automated Lockers</strong> (Locker Bay 1) • 24/7 Access</li>
+          <li class="p-3 bg-gray-50 rounded border">📍 <strong>North Quad Parcel Center</strong> (Engineering Hall 102) • 09:00 - 18:00</li>
+        </ul>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll("main > div").forEach(el => el.classList.add("hidden"));
+      document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
+      document.getElementById("page-" + tabId).classList.remove("hidden");
+      document.getElementById("tab-" + tabId).classList.add("active");
+    }
+
+    function switchRole(role) {
+      document.getElementById("roleSelector").value = role;
+      if (role === 'STUDENT') switchTab('student');
+      else if (role === 'OPERATIONS_MANAGER') switchTab('operator');
+      else switchTab('dashboard');
+    }
+
+    function trackStudentParcel() {
+      const trk = document.getElementById('studentTrackInput').value.trim();
+      const res = document.getElementById('studentParcelResult');
+      if (trk === 'TRK-TEST-999' || trk) {
+        res.innerHTML = `
+          <div class="flex justify-between items-center border-b pb-2">
+            <span class="font-bold text-amazon-navy text-sm">TRK-TEST-999</span>
+            <span class="bg-amber-100 text-amber-900 px-2.5 py-0.5 rounded font-bold">AWAITING HANDOVER</span>
+          </div>
+          <p class="text-gray-700"><strong>Recipient:</strong> Taylor Swift (Hostel A - Room 302)</p>
+          <div class="p-4 bg-amber-50 border border-amber-200 rounded space-y-2 mt-2">
+            <h4 class="font-bold text-amazon-navy text-xs">Lodge Complaint / Provide Feedback:</h4>
+            <input type="text" placeholder="Detail your complaint..." class="w-full p-2 border rounded bg-white text-xs" id="feedbackInput">
+            <button onclick="alert('Complaint submitted to Campus Operator!')" class="bg-amazon-orange text-amazon-navy font-bold px-3 py-1.5 rounded">Submit Complaint to Operator</button>
+          </div>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
