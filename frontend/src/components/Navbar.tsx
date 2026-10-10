@@ -21,7 +21,7 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
         <Link to={isAuthenticated ? (user?.role === 'STUDENT' ? '/student' : user?.role === 'DELIVERY_PARTNER' ? '/partner' : '/analytics') : '/login'} className="flex items-center space-x-3 group">
           <img
-            src="/logo.jpg"
+            src="/CampusConnect/logo.jpg"
             alt="CampusConnect Logo"
             className="w-10 h-10 object-contain rounded-lg border border-amazon-orange/40 bg-amazon-navy p-0.5"
             onError={(e) => {

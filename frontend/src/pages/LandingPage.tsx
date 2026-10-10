@@ -13,7 +13,7 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <div className="flex justify-center">
             <img
-              src="/logo.jpg"
+              src="/CampusConnect/logo.jpg"
               alt="CampusConnect Logo"
               className="w-24 h-24 object-contain rounded-2xl border-2 border-amazon-orange/40 bg-amazon-navy p-1 shadow-lg"
               onError={(e) => {
